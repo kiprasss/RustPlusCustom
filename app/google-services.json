@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "448393541860",
+    "project_id": "rust2-5bd97",
+    "storage_bucket": "rust2-5bd97.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:448393541860:android:bd1f7f7b582776b38ed4f1",
+        "android_client_info": {
+          "package_name": "com.example.rustplus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_dwEmJOIRPtvD5VGBZA7cLhpOccygxhg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

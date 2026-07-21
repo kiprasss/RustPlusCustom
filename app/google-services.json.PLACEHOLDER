@@ -1,0 +1,14 @@
+Šis failas yra TIK PAAIŠKINIMAS, ne tikras google-services.json.
+
+Kad Firebase (FCM) veiktų, jums reikia:
+1. Eiti į https://console.firebase.google.com/
+2. Sukurti naują projektą (arba naudoti esamą)
+3. Pridėti Android app'ą su package name: com.example.rustplus
+   (arba pakeisti applicationId app/build.gradle.kts faile, jei norite kito)
+4. Firebase Console automatiškai leis atsisiųsti failą "google-services.json"
+5. Įdėkite JĮ (tikrą failą) į: app/google-services.json
+   (TIKSLIAI ŠITOJE VIETOJE, PEZ šio placeholder failo)
+6. Ištrinkite šitą placeholder failą (google-services.json.PLACEHOLDER)
+
+Be tikro google-services.json failo, "com.google.gms.google-services" Gradle
+plugin'as build metu mes klaidą ir projektas nesikompiliuos.

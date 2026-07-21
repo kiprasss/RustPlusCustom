@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gcm_defaultSenderId" translatable="false">448393541860</string>
+    <string name="google_api_key" translatable="false">AIzaSyA_dwEmJOIRPtvD5VGBZA7cLhpOccygxhg</string>
+    <string name="google_app_id" translatable="false">1:448393541860:android:bd1f7f7b582776b38ed4f1</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyA_dwEmJOIRPtvD5VGBZA7cLhpOccygxhg</string>
+    <string name="google_storage_bucket" translatable="false">rust2-5bd97.firebasestorage.app</string>
+    <string name="project_id" translatable="false">rust2-5bd97</string>
+</resources>

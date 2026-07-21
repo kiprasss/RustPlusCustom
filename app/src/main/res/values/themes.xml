@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.RustPlusCustom" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#B33A3A</item>
+        <item name="colorPrimaryDark">#7A2727</item>
+        <item name="colorAccent">#B33A3A</item>
+    </style>
+</resources>
