@@ -6,9 +6,9 @@ import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
+import rustplus.Rustplus.AppEmpty
 import rustplus.Rustplus.AppMessage
 import rustplus.Rustplus.AppRequest
-import rustplus.Rustplus.AppEmpty
 
 class RustPlusClient(
     private val serverIp: String,
@@ -16,16 +16,26 @@ class RustPlusClient(
     private val steamId: Long,
     private val playerToken: Int       // gaunamas iš FCM pairing pranešimo
 ) {
+    companion object {
+        // Bendras OkHttpClient visoms instancijoms - vengiama naujo thread pool
+        // kūrimo kaskart paspaudus "Prisijungti prie serverio".
+        private val sharedClient = OkHttpClient()
+    }
+
     private var webSocket: WebSocket? = null
     private var seq = 0
 
     fun connect(onAlarm: (String) -> Unit) {
+        // Uždarome bet kokį ankstesnį ryšį prieš atidarant naują - kitaip senas
+        // WebSocket lieka atviras fone (resursų nutekėjimas), jei connect()
+        // paspaudžiama pakartotinai.
+        webSocket?.close(1000, null)
+
         val request = Request.Builder()
             .url("ws://$serverIp:$serverPort")
             .build()
 
-        val client = OkHttpClient()
-        webSocket = client.newWebSocket(request, object : WebSocketListener() {
+        webSocket = sharedClient.newWebSocket(request, object : WebSocketListener() {
 
             override fun onOpen(webSocket: WebSocket, response: Response) {
                 android.util.Log.d("RustPlus", "Prisijungta prie serverio")
@@ -62,5 +72,6 @@ class RustPlusClient(
 
     fun disconnect() {
         webSocket?.close(1000, null)
+        webSocket = null
     }
 }

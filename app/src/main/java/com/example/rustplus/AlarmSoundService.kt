@@ -8,16 +8,31 @@ import android.content.Intent
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 
 class AlarmSoundService : Service() {
 
     private var mediaPlayer: MediaPlayer? = null
+    private val stopHandler = Handler(mainLooper)
+    private val stopRunnable = Runnable { stopSelf() }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val title = intent?.getStringExtra("title") ?: "SMART ALARM"
         val body = intent?.getStringExtra("body") ?: "Kažkas užpuolė bazę!"
+
+        // Jei ankstesnis aliarmas dar skambėjo (naujas Smart Alarm atėjo per <30s),
+        // sustabdome jo laikmatį ir MediaPlayer - kitaip senas laikmatis gali per
+        // anksti nutraukti NAUJĄ aliarmą, arba senas MediaPlayer nutekės.
+        stopHandler.removeCallbacks(stopRunnable)
+        try {
+            mediaPlayer?.stop()
+        } catch (e: IllegalStateException) {
+            // jau sustabdytas / dar nepaleistas - ignoruojame
+        }
+        mediaPlayer?.release()
+        mediaPlayer = null
 
         createChannel()
         val notif = NotificationCompat.Builder(this, "alarm_channel")
@@ -48,12 +63,17 @@ class AlarmSoundService : Service() {
             start()
         }
 
-        android.os.Handler(mainLooper).postDelayed({ stopSelf() }, 30_000)
+        stopHandler.postDelayed(stopRunnable, 30_000)
         return START_NOT_STICKY
     }
 
     override fun onDestroy() {
-        mediaPlayer?.stop()
+        stopHandler.removeCallbacks(stopRunnable)
+        try {
+            mediaPlayer?.stop()
+        } catch (e: IllegalStateException) {
+            // jau sustabdytas / dar nepaleistas - ignoruojame
+        }
         mediaPlayer?.release()
         super.onDestroy()
     }
