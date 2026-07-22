@@ -35,4 +35,11 @@
         android:layout_height="wrap_content"
         android:text="Prisijungti prie serverio" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(palaikykite 3s = Debug Mode)"
+        android:textSize="11sp"
+        android:layout_marginTop="6dp" />
+
 </LinearLayout>

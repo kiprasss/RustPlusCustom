@@ -2,6 +2,10 @@ package com.example.rustplus
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.MotionEvent
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +16,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var prefs: android.content.SharedPreferences
     private lateinit var tvStatus: TextView
 
+    private val debugHandler = Handler(Looper.getMainLooper())
+    private var debugTriggered = false
+    private val debugRunnable = Runnable {
+        debugTriggered = true
+        startActivity(Intent(this, DebugActivity::class.java))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -19,11 +30,32 @@ class MainActivity : AppCompatActivity() {
         prefs = getSharedPreferences("rustplus", MODE_PRIVATE)
         tvStatus = findViewById(R.id.tvStatus)
 
-        findViewById<android.widget.Button>(R.id.btnSteamLogin).setOnClickListener {
+        findViewById<Button>(R.id.btnSteamLogin).setOnClickListener {
             startActivity(Intent(this, SteamLoginActivity::class.java))
         }
 
-        findViewById<android.widget.Button>(R.id.btnConnect).setOnClickListener {
+        val btnConnect = findViewById<Button>(R.id.btnConnect)
+
+        // Palaikius šį mygtuką ~3 sekundes, atsidaro Debug Mode ekranas
+        // (SharedPreferences reikšmės + rankinis server_ip/port/token įvedimas).
+        btnConnect.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    debugTriggered = false
+                    debugHandler.postDelayed(debugRunnable, 3000)
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    debugHandler.removeCallbacks(debugRunnable)
+                }
+            }
+            false // netrukdome įprastam onClick veikimui trumpiems paspaudimams
+        }
+
+        btnConnect.setOnClickListener {
+            if (debugTriggered) {
+                // Debug Mode jau atidarytas per ilgą paspaudimą - praleidžiame connect.
+                return@setOnClickListener
+            }
             val steamId = prefs.getString("steam_id", null)?.toLongOrNull()
             if (steamId == null) {
                 Toast.makeText(this, "Pirma prisijunkite per Steam", Toast.LENGTH_SHORT).show()
@@ -61,9 +93,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Atnaujiname būseną kaskart grįžus į ekraną (pvz. po Steam prisijungimo),
-        // kad matytumėte, ar steam_id/pairing jau išsaugoti - be šito ekranas
-        // atrodydavo "nieko nevyksta" net kai prisijungimas realiai pavykdavo.
         updateStatus()
     }
 

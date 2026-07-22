@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/tvDebugInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:fontFamily="monospace"
+            android:layout_marginBottom="24dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rankinis serverio nustatymas (testavimui):"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/etServerIp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Server IP" />
+
+        <EditText
+            android:id="@+id/etServerPort"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Server Port"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/etPlayerToken"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Player Token"
+            android:inputType="number"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/btnSaveManual"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Išsaugoti rankinius duomenis"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btnClearAll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Išvalyti visus duomenis" />
+
+    </LinearLayout>
+</ScrollView>

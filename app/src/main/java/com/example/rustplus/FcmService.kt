@@ -15,6 +15,13 @@ class FcmService : FirebaseMessagingService() {
 
     override fun onMessageReceived(msg: RemoteMessage) {
         val data = msg.data
+
+        // Debug: išsaugome paskutinio FCM pranešimo žaliavinius duomenis, kad
+        // Debug Mode ekrane matytumėte tikrus laukų pavadinimus iš realaus serverio.
+        getSharedPreferences("rustplus", MODE_PRIVATE).edit()
+            .putString("last_fcm_raw", data.toString())
+            .apply()
+
         val channelId = data["channelId"] ?: return
 
         when (channelId) {

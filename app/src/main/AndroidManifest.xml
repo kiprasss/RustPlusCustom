@@ -30,6 +30,10 @@
             android:name=".SteamLoginActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".DebugActivity"
+            android:exported="false" />
+
         <service
             android:name=".FcmService"
             android:exported="false">
