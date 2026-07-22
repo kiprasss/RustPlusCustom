@@ -1,5 +1,6 @@
 package com.example.rustplus
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -19,6 +20,7 @@ class DebugActivity : AppCompatActivity() {
         prefs = getSharedPreferences("rustplus", MODE_PRIVATE)
         tvInfo = findViewById(R.id.tvDebugInfo)
 
+        val etTestAlarmText = findViewById<EditText>(R.id.etTestAlarmText)
         val etIp = findViewById<EditText>(R.id.etServerIp)
         val etPort = findViewById<EditText>(R.id.etServerPort)
         val etToken = findViewById<EditText>(R.id.etPlayerToken)
@@ -28,6 +30,48 @@ class DebugActivity : AppCompatActivity() {
         etToken.setText(prefs.getInt("player_token", 0).toString())
 
         refreshInfo()
+
+        // Testuoja PILNĄ aliarmo grandinę (foreground service, notification, garsas)
+        // lygiai taip pat, kaip tai vyktų gavus tikrą Smart Alarm signalą iš serverio -
+        // bet be jokio realaus WebSocket/FCM ryšio.
+        findViewById<Button>(R.id.btnTestAlarm).setOnClickListener {
+            val testMsg = etTestAlarmText.text.toString().trim()
+                .ifEmpty { "Testinis Smart Alarm pranešimas" }
+            startService(
+                Intent(this, AlarmSoundService::class.java)
+                    .putExtra("title", "🚨 TEST Smart Alarm")
+                    .putExtra("body", testMsg)
+            )
+            Toast.makeText(this, "Aliarmas paleistas (testinis)", Toast.LENGTH_SHORT).show()
+        }
+
+        // Simuliuoja sėkmingą "pairing" atsakymą (tarsi FCM būtų atsiuntęs
+        // server_ip/port/playerToken) - MainActivity po to rodys "Serveris: susietas".
+        findViewById<Button>(R.id.btnSimulatePairing).setOnClickListener {
+            prefs.edit()
+                .putString("server_ip", "127.0.0.1")
+                .putInt("server_port", 28082)
+                .putInt("player_token", 123456789)
+                .apply()
+            etIp.setText("127.0.0.1")
+            etPort.setText("28082")
+            etToken.setText("123456789")
+            Toast.makeText(this, "Pairing simuliuotas - dabar 'Susieta'", Toast.LENGTH_SHORT).show()
+            refreshInfo()
+        }
+
+        findViewById<Button>(R.id.btnSimulateDisconnect).setOnClickListener {
+            prefs.edit()
+                .remove("server_ip")
+                .remove("server_port")
+                .remove("player_token")
+                .apply()
+            etIp.setText("")
+            etPort.setText("28082")
+            etToken.setText("0")
+            Toast.makeText(this, "Atsijungimas simuliuotas", Toast.LENGTH_SHORT).show()
+            refreshInfo()
+        }
 
         findViewById<Button>(R.id.btnSaveManual).setOnClickListener {
             val ip = etIp.text.toString().trim()
@@ -58,13 +102,13 @@ class DebugActivity : AppCompatActivity() {
         val fcmToken = prefs.getString("fcm_token", null)
         val fcmShort = if (fcmToken != null) fcmToken.take(24) + "..." else "—"
 
-        tvInfo.text = "DEBUG REŽIMAS\n\n" +
+        tvInfo.text = "BŪSENA\n\n" +
             "steam_id: ${prefs.getString("steam_id", "—")}\n" +
             "fcm_token: $fcmShort\n" +
             "player_token: ${prefs.getInt("player_token", 0)}\n" +
             "server_ip: ${prefs.getString("server_ip", "—")}\n" +
             "server_port: ${prefs.getInt("server_port", 28082)}\n\n" +
-            "Paskutinis FCM pranešimas (žaliaviniai duomenys):\n" +
+            "Paskutinis tikras FCM pranešimas (žaliaviniai duomenys):\n" +
             (prefs.getString("last_fcm_raw", "— dar negauta nei vieno —") ?: "—")
     }
 }
