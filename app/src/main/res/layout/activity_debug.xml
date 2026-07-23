@@ -75,6 +75,19 @@
                     android:layout_marginBottom="10dp" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnStopAlarm"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="⏹   Sustabdyti Alarmą"
+                    android:textAllCaps="false"
+                    android:textColor="@color/text_primary"
+                    app:cornerRadius="12dp"
+                    app:strokeColor="@color/text_secondary"
+                    app:strokeWidth="1.5dp"
+                    android:layout_marginBottom="10dp" />
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSimulatePairing"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="match_parent"

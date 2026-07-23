@@ -15,11 +15,25 @@ import androidx.core.app.NotificationCompat
 
 class AlarmSoundService : Service() {
 
+    companion object {
+        // Naudojama tiek pranešimo "Sustabdyti" mygtuko, tiek programos vidaus
+        // mygtuko - abu siunčia tą patį veiksmą, tad aliarmas sustabdomas
+        // vienodai nepriklausomai nuo to, ar programa atidaryta, ar fone/uždaryta.
+        const val ACTION_STOP = "com.example.rustplus.ACTION_STOP"
+        private const val NOTIF_ID = 1
+        private const val CHANNEL_ID = "alarm_channel"
+    }
+
     private var mediaPlayer: MediaPlayer? = null
     private val stopHandler = Handler(Looper.getMainLooper())
-    private val stopRunnable = Runnable { stopSelf() }
+    private val stopRunnable = Runnable { stopAlarm() }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (intent?.action == ACTION_STOP) {
+            stopAlarm()
+            return START_NOT_STICKY
+        }
+
         val title = intent?.getStringExtra("title") ?: "SMART ALARM"
         val body = intent?.getStringExtra("body") ?: "Kažkas užpuolė bazę!"
 
@@ -36,12 +50,28 @@ class AlarmSoundService : Service() {
         mediaPlayer = null
 
         createChannel()
-        val notif = NotificationCompat.Builder(this, "alarm_channel")
+
+        // "Sustabdyti" veiksmas pranešime - paspaudus, PendingIntent siunčia
+        // ACTION_STOP atgal į šį patį servisą (veikia net kai programa uždaryta).
+        val stopIntent = Intent(this, AlarmSoundService::class.java).apply { action = ACTION_STOP }
+        val stopPendingIntent = PendingIntent.getService(
+            this, 1, stopIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val notif = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(title)
             .setContentText(body)
             .setSmallIcon(android.R.drawable.ic_dialog_alert)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
+            // setOngoing(true): pranešimo nebegalima tiesiog nubraukti pirštu -
+            // anksčiau tai buvo galima, o garsas toliau grodavo be jokio matomo
+            // pranešimo. Dabar vienintelis būdas sustabdyti - "Sustabdyti" mygtukas
+            // (arba 30s automatinis laikmatis), tad garsas ir pranešimas visada
+            // lieka sinchronizuoti.
+            .setOngoing(true)
+            .addAction(android.R.drawable.ic_media_pause, "Sustabdyti", stopPendingIntent)
             .setFullScreenIntent(
                 PendingIntent.getActivity(
                     this, 0,
@@ -50,7 +80,7 @@ class AlarmSoundService : Service() {
                 ), true
             )
             .build()
-        startForeground(1, notif)
+        startForeground(NOTIF_ID, notif)
 
         // Reikalauja app/src/main/res/raw/alarm.mp3 failo
         mediaPlayer = MediaPlayer.create(this, R.raw.alarm)?.apply {
@@ -66,6 +96,19 @@ class AlarmSoundService : Service() {
 
         stopHandler.postDelayed(stopRunnable, 30_000)
         return START_NOT_STICKY
+    }
+
+    private fun stopAlarm() {
+        stopHandler.removeCallbacks(stopRunnable)
+        try {
+            mediaPlayer?.stop()
+        } catch (e: IllegalStateException) {
+            // jau sustabdytas / dar nepaleistas - ignoruojame
+        }
+        mediaPlayer?.release()
+        mediaPlayer = null
+        stopForeground(STOP_FOREGROUND_REMOVE)
+        stopSelf()
     }
 
     override fun onDestroy() {
@@ -84,7 +127,7 @@ class AlarmSoundService : Service() {
     private fun createChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val ch = NotificationChannel(
-                "alarm_channel", "Smart Alarms",
+                CHANNEL_ID, "Smart Alarms",
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 description = "Rust Smart Alarm pranešimai"

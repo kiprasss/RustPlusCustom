@@ -47,6 +47,13 @@ class DebugActivity : AppCompatActivity() {
             Toast.makeText(this, "Aliarmas paleistas (testinis)", Toast.LENGTH_SHORT).show()
         }
 
+        findViewById<Button>(R.id.btnStopAlarm).setOnClickListener {
+            startService(
+                Intent(this, AlarmSoundService::class.java).apply { action = AlarmSoundService.ACTION_STOP }
+            )
+            Toast.makeText(this, "Aliarmas sustabdytas", Toast.LENGTH_SHORT).show()
+        }
+
         // Simuliuoja sėkmingą "pairing" atsakymą (tarsi FCM būtų atsiuntęs
         // server_ip/port/playerToken) - MainActivity po to rodys "Serveris: susietas".
         findViewById<Button>(R.id.btnSimulatePairing).setOnClickListener {
