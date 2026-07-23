@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 
 class DebugActivity : AppCompatActivity() {
 
@@ -37,7 +38,8 @@ class DebugActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnTestAlarm).setOnClickListener {
             val testMsg = etTestAlarmText.text.toString().trim()
                 .ifEmpty { "Testinis Smart Alarm pranešimas" }
-            startService(
+            ContextCompat.startForegroundService(
+                this,
                 Intent(this, AlarmSoundService::class.java)
                     .putExtra("title", "🚨 TEST Smart Alarm")
                     .putExtra("body", testMsg)

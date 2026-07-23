@@ -2,6 +2,7 @@ package com.example.rustplus
 
 import android.content.Intent
 import android.util.Log
+import androidx.core.content.ContextCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -29,7 +30,7 @@ class FcmService : FirebaseMessagingService() {
                 val title = data["title"] ?: "Rust Smart Alarm"
                 val body = data["message"] ?: "Alarm buvo aktyvuotas"
 
-                startService(Intent(this, AlarmSoundService::class.java).apply {
+                ContextCompat.startForegroundService(this, Intent(this, AlarmSoundService::class.java).apply {
                     putExtra("title", title)
                     putExtra("body", body)
                 })

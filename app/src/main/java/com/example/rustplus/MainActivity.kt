@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : AppCompatActivity() {
@@ -76,7 +77,8 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Jungiamasi prie $ip:$port...", Toast.LENGTH_SHORT).show()
             val client = RustPlusClient(ip, port, steamId, token)
             client.connect { alarmText ->
-                startService(
+                ContextCompat.startForegroundService(
+                    this,
                     Intent(this, AlarmSoundService::class.java)
                         .putExtra("title", "Smart Alarm")
                         .putExtra("body", alarmText)

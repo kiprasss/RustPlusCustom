@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background_dark"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,93 +15,203 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🧪 Simuliacija (be realaus serverio)"
+            android:text="TEST / DEBUG"
+            android:textSize="22sp"
             android:textStyle="bold"
-            android:textSize="16sp"
-            android:layout_marginBottom="12dp" />
-
-        <EditText
-            android:id="@+id/etTestAlarmText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Testinio pranešimo tekstas (nebūtina)"
-            android:layout_marginBottom="8dp" />
-
-        <Button
-            android:id="@+id/btnTestAlarm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="🔔 Testuoti Smart Alarm (garsas + pranešimas)"
-            android:layout_marginBottom="8dp" />
-
-        <Button
-            android:id="@+id/btnSimulatePairing"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="🔗 Simuliuoti sėkmingą pairing (be žaidimo)"
-            android:layout_marginBottom="8dp" />
-
-        <Button
-            android:id="@+id/btnSimulateDisconnect"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="🔌 Simuliuoti atsijungimą nuo serverio"
-            android:layout_marginBottom="24dp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#CCCCCC"
-            android:layout_marginBottom="24dp" />
-
-        <TextView
-            android:id="@+id/tvDebugInfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:fontFamily="monospace"
-            android:layout_marginBottom="24dp" />
+            android:textColor="@color/text_primary"
+            android:letterSpacing="0.04"
+            android:layout_marginBottom="4dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rankinis serverio nustatymas:"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
+            android:text="Testuokite funkcijas be realaus serverio ryšio"
+            android:textSize="13sp"
+            android:textColor="@color/text_secondary"
+            android:layout_marginBottom="24dp" />
 
-        <EditText
-            android:id="@+id/etServerIp"
+        <!-- SIMULIACIJA -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Server IP" />
+            app:cardBackgroundColor="@color/surface_dark"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            android:layout_marginBottom="16dp">
 
-        <EditText
-            android:id="@+id/etServerPort"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🧪 SIMULIACIJA"
+                    android:textSize="12sp"
+                    android:textColor="@color/accent_rust"
+                    android:letterSpacing="0.08"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="14dp" />
+
+                <EditText
+                    android:id="@+id/etTestAlarmText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Testinio pranešimo tekstas (nebūtina)"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_secondary"
+                    android:layout_marginBottom="14dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnTestAlarm"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="🔔   Testuoti Smart Alarm"
+                    android:textAllCaps="false"
+                    app:cornerRadius="12dp"
+                    app:backgroundTint="@color/accent_rust"
+                    android:layout_marginBottom="10dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSimulatePairing"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="🔗   Simuliuoti sėkmingą pairing"
+                    android:textAllCaps="false"
+                    android:textColor="@color/success_green"
+                    app:cornerRadius="12dp"
+                    app:strokeColor="@color/success_green"
+                    app:strokeWidth="1.5dp"
+                    android:layout_marginBottom="10dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSimulateDisconnect"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="🔌   Simuliuoti atsijungimą"
+                    android:textAllCaps="false"
+                    android:textColor="@color/danger_red"
+                    app:cornerRadius="12dp"
+                    app:strokeColor="@color/danger_red"
+                    app:strokeWidth="1.5dp" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- BŪSENA -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Server Port"
-            android:inputType="number" />
+            app:cardBackgroundColor="@color/surface_dark"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            android:layout_marginBottom="16dp">
 
-        <EditText
-            android:id="@+id/etPlayerToken"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📋 BŪSENA"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary"
+                    android:letterSpacing="0.08"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp" />
+
+                <TextView
+                    android:id="@+id/tvDebugInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary"
+                    android:fontFamily="monospace"
+                    android:lineSpacingExtra="3dp" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- RANKINIS NUSTATYMAS -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Player Token"
-            android:inputType="number"
-            android:layout_marginBottom="16dp" />
+            app:cardBackgroundColor="@color/surface_dark"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            android:layout_marginBottom="8dp">
 
-        <Button
-            android:id="@+id/btnSaveManual"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Išsaugoti rankinius duomenis"
-            android:layout_marginBottom="8dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp">
 
-        <Button
-            android:id="@+id/btnClearAll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Išvalyti visus duomenis" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⚙️ RANKINIS NUSTATYMAS"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary"
+                    android:letterSpacing="0.08"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp" />
+
+                <EditText
+                    android:id="@+id/etServerIp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Server IP"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_secondary" />
+
+                <EditText
+                    android:id="@+id/etServerPort"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Server Port"
+                    android:inputType="number"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_secondary" />
+
+                <EditText
+                    android:id="@+id/etPlayerToken"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Player Token"
+                    android:inputType="number"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_secondary"
+                    android:layout_marginBottom="14dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSaveManual"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="Išsaugoti"
+                    android:textAllCaps="false"
+                    app:cornerRadius="12dp"
+                    app:backgroundTint="@color/accent_rust"
+                    android:layout_marginBottom="10dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnClearAll"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Išvalyti visus duomenis"
+                    android:textAllCaps="false"
+                    android:textColor="@color/text_secondary" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 </ScrollView>

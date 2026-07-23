@@ -10,12 +10,13 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import androidx.core.app.NotificationCompat
 
 class AlarmSoundService : Service() {
 
     private var mediaPlayer: MediaPlayer? = null
-    private val stopHandler = Handler(mainLooper)
+    private val stopHandler = Handler(Looper.getMainLooper())
     private val stopRunnable = Runnable { stopSelf() }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
